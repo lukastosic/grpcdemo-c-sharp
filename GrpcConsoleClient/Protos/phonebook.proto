@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+option csharp_namespace = "PhoneBookServer";
+
+service PhoneBook {
+	rpc CreateNewContact (ContactModel) returns (ContactModel);
+	rpc AddPhoneNumber (AddPhoneNumberRequest) returns (ContactModel);
+	rpc SearchContacts (SearchModel) returns (stream ContactModel);
+	rpc GetAllContacts (GetAllRequest) returns (ContactsResponse);
+	rpc DeleteContact (DeleteContactRequest) returns (GenericResponseMessage);
+	rpc DeletePhoneNumber (DeletePhoneNumberRequest) returns (ContactModel);
+	rpc UpdateContact (ContactModel) returns (ContactModel);
+	rpc UpdatePhoneNumber (PhoneNumberModel) returns (ContactModel);
+	rpc GetContact (GetContactRequest) returns (ContactModel);
+	rpc GetPhoneNumber (GetPhoneNumberRequest) returns (PhoneNumberModel);
+}
+
+message ContactModel {
+	int32 contactID = 1;
+	string firstName = 2;
+	string lastName = 3;
+	string address = 4;
+	string zipcode = 5;
+	string city = 6;
+	string country = 7;
+	repeated PhoneNumberModel phoneNumbers = 8;
+}
+
+enum PhoneType {
+	HOME = 0;
+	MOBILE = 1;
+	WORK = 2;
+}
+
+message PhoneNumberModel {
+	int32 numberID = 1;	
+	PhoneType phoneType = 2;
+	string number = 3;
+}
+
+message GetAllRequest {}
+
+message SearchModel {
+	string firstName = 1;
+	string lastName = 2;
+	string address = 3;
+	string zipcode = 4;
+	string city = 5;
+	string country = 6;
+	string phoneNumber = 7;
+}
+
+message AddPhoneNumberRequest {
+	int32 contactID = 1;	
+	PhoneType phoneType = 2;
+	string number = 3;
+}
+
+message ContactsResponse {
+	repeated ContactModel contact = 1;
+}
+
+message DeletePhoneNumberRequest {
+	int32 numberID = 2;
+}
+
+message GenericResponseMessage {
+	string message = 1;
+}
+
+message DeleteContactRequest {
+	int32 contactID = 1;
+}
+
+message GetContactRequest {
+	int32 contactID = 1;
+}
+
+message GetPhoneNumberRequest {
+	int32 numberID = 1;
+}
+
+
