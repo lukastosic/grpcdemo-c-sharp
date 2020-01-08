@@ -48,6 +48,16 @@ namespace GrpcServer
                 {
                     await context.Response.WriteAsync(System.IO.File.ReadAllText("Protos/phonebook.proto"));
                 });
+
+                endpoints.MapGet("/protos/greet.proto", async context =>
+                {
+                    await context.Response.WriteAsync(System.IO.File.ReadAllText("Protos/greet.proto"));
+                });
+
+                endpoints.MapGet("/protos/buddyguy.proto", async context =>
+                {
+                    await context.Response.WriteAsync(System.IO.File.ReadAllText("Protos/buddyguy.proto"));
+                });
             });
         }
     }
