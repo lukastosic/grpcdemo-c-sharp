@@ -23,16 +23,9 @@ namespace GrpcConsoleClient
             GreetClient greetClient = new GreetClient(phoneBookGrpcUrl);
             BuddyGuyClient buddyGuyClient = new BuddyGuyClient(phoneBookGrpcUrl);
 
-
-
             while (true)
             {
                 Console.Clear();
-
-
-                await buddyGuyClient.StartBuddyGuy();
-
-
                 Console.WriteLine($"Phonebook gRPC server will be contacted on: {phoneBookGrpcUrl}");
                 Console.WriteLine($"\r\nGreet received: {await greetClient.DoTheGreet("gRPC Developer")}");
                 Console.WriteLine("\r\nMake your choice");
@@ -80,6 +73,9 @@ namespace GrpcConsoleClient
                         Console.WriteLine("bye bye");
                         await Task.Delay(2000);
                         Environment.Exit(0);
+                        break;
+                    case '0':
+                        await buddyGuyClient.StartBuddyGuy(20000);
                         break;
                     default:
                         break;
