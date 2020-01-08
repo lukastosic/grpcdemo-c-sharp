@@ -5,14 +5,20 @@ using System.Text;
 
 namespace GrpcConsoleClient
 {
+    // This class is used to have at least a little bit cleaner code on the client class.
+    // To relieve client implementation of showing UI items, and just focus on the implementation.
+
+    /// <summary>
+    /// Helper class that displays various information to the console
+    /// </summary>
     public static class UIHelper
     {
-        public static SearchModel InputSearchParameters()
+        public static SearchRequest InputSearchParameters()
         {
-            SearchModel searchModel = new SearchModel();
-            searchModel.FirstName = StringInputSameLine("Enter part of the first name (Enter for empty)");
-            searchModel.LastName = StringInputSameLine("Enter part of the last name (Enter for empty)");
-            return searchModel;
+            SearchRequest searchRequest = new SearchRequest();
+            searchRequest.FirstName = StringInputSameLine("Enter part of the first name (Enter for empty)");
+            searchRequest.LastName = StringInputSameLine("Enter part of the last name (Enter for empty)");
+            return searchRequest;
         }
 
         public static ContactModel InputNewContact(bool inputPhone)
@@ -109,22 +115,28 @@ namespace GrpcConsoleClient
 
         public static void PrintContact(ContactModel contact)
         {
-            Console.WriteLine($"{contact.ContactID}");
-            Console.WriteLine($"{contact.FirstName} {contact.LastName}");
-            Console.WriteLine($"{contact.Country} {contact.City} {contact.Zipcode} {contact.Address}");
+            Console.WriteLine($"Contact ID: {contact.ContactID}");
+            Console.WriteLine($"Name: {contact.FirstName} {contact.LastName}");
+            Console.WriteLine($"Address: {contact.Country}, {contact.City}, {contact.Zipcode}, {contact.Address}");
             Console.WriteLine("Phone numbers: ");
             foreach (var phone in contact.PhoneNumbers)
             {
-                Console.WriteLine($"{phone.NumberID}: {phone.PhoneType} {phone.Number}");
+                Console.Write("\t");
+                PrintPhoneNumberSingleLine(phone);
             }
             Console.WriteLine("================================");
         }
 
-        public static void PrintPhoneNumber(PhoneNumberModel phone)
+        public static void PrintPhoneNumberMultiline(PhoneNumberModel phone)
         {
             Console.WriteLine($"Phone number ID: {phone.NumberID}");
             Console.WriteLine($"Phone number type: {phone.PhoneType}");
             Console.WriteLine($"Phone number: {phone.Number}");
+        }
+
+        public static void PrintPhoneNumberSingleLine(PhoneNumberModel phone)
+        {
+            Console.WriteLine($"Phone ID: {phone.NumberID}, Type: {phone.PhoneType}, Number: {phone.Number}");
         }
     }
 }

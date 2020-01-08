@@ -9,33 +9,43 @@ namespace GrpcConsoleClient
     {
         static async Task Main(string[] args)
         {
+            // Get url to the gRPC server from the appsettings.json file
             string phoneBookGrpcUrl = GetGrpcUrl();
 
+            // If not found - exit from the application
             if (phoneBookGrpcUrl == null)
-            {
-                return;
+            {   
+                Environment.Exit(404);
             }
 
+            // Init client implementations of gRPC
             PhoneBookClient client = new PhoneBookClient(phoneBookGrpcUrl);
             GreetClient greetClient = new GreetClient(phoneBookGrpcUrl);
+            BuddyGuyClient buddyGuyClient = new BuddyGuyClient(phoneBookGrpcUrl);
+
+
 
             while (true)
             {
                 Console.Clear();
 
-                Console.WriteLine($"Phonebook gRPC server will be contacted on: {phoneBookGrpcUrl}");
-                Console.WriteLine($"Greet received: {await greetClient.DoTheGreet("gRPC Developer")}");
 
-                Console.WriteLine("1. List all contacts");
-                Console.WriteLine("2. Search for contact");
-                Console.WriteLine("3. Add new contact");
-                Console.WriteLine("4. Add phone number to an existing contact");
-                Console.WriteLine("5. Edit existing phone number");
-                Console.WriteLine("6. Edit existing contact");
-                Console.WriteLine("7. Delete phone number");
-                Console.WriteLine("8. Delete contact");
-                Console.WriteLine("9. EXIT");
-                Console.Write("Enter your choice: ");
+                await buddyGuyClient.StartBuddyGuy();
+
+
+                Console.WriteLine($"Phonebook gRPC server will be contacted on: {phoneBookGrpcUrl}");
+                Console.WriteLine($"\r\nGreet received: {await greetClient.DoTheGreet("gRPC Developer")}");
+                Console.WriteLine("\r\nMake your choice");
+                Console.WriteLine("\t1. List all contacts");
+                Console.WriteLine("\t2. Search for contact");
+                Console.WriteLine("\t3. Add new contact");
+                Console.WriteLine("\t4. Add phone number to an existing contact");
+                Console.WriteLine("\t5. Edit existing phone number");
+                Console.WriteLine("\t6. Edit existing contact");
+                Console.WriteLine("\t7. Delete phone number");
+                Console.WriteLine("\t8. Delete contact");
+                Console.WriteLine("\t9. EXIT");
+                Console.Write("\r\nEnter your choice: ");
                 var choice = Console.ReadKey();
                 Console.Clear();
                 
@@ -69,7 +79,8 @@ namespace GrpcConsoleClient
                         Console.WriteLine();
                         Console.WriteLine("bye bye");
                         await Task.Delay(2000);
-                        return;
+                        Environment.Exit(0);
+                        break;
                     default:
                         break;
                 }
@@ -77,6 +88,11 @@ namespace GrpcConsoleClient
             }
         }
 
+        /// <summary>
+        /// Used to get connection string from appsettings.json
+        /// Connection string should be located under the property named "PhoneBookGrpcServer" within "ConnectionStrings" section
+        /// </summary>
+        /// <returns>connection string</returns>
         static string GetGrpcUrl()
         {
             var builder = new ConfigurationBuilder()

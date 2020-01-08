@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace GrpcServer.Services
 {
+    /// <summary>
+    /// Implementation of phone book RPC service
+    /// </summary>
     public class PhoneBookService : PhoneBook.PhoneBookBase 
     {
         private readonly ILogger<PhoneBookService> logger;
@@ -36,7 +39,7 @@ namespace GrpcServer.Services
             return Task.FromResult(response);
         }
 
-        public override async Task SearchContacts(SearchModel request, IServerStreamWriter<ContactModel> responseStream, ServerCallContext context)
+        public override async Task SearchContacts(SearchRequest request, IServerStreamWriter<ContactModel> responseStream, ServerCallContext context)
         {
             foreach (var contact in repository.Contacts)
             {

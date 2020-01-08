@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcServer.BuddyGuy";
+
+service BuddyGuy {
+	rpc ImNotYour (stream BuddyRequest) returns (stream GuyResponse);
+}
+
+message BuddyRequest {
+	string message = 1;
+}
+
+message GuyResponse {
+	string message = 1;
+}
+
+

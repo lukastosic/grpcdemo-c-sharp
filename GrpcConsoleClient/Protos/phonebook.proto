@@ -5,7 +5,7 @@ option csharp_namespace = "PhoneBookServer";
 service PhoneBook {
 	rpc CreateNewContact (ContactModel) returns (ContactModel);
 	rpc AddPhoneNumber (AddPhoneNumberRequest) returns (ContactModel);
-	rpc SearchContacts (SearchModel) returns (stream ContactModel);
+	rpc SearchContacts (SearchRequest) returns (stream ContactModel);
 	rpc GetAllContacts (GetAllRequest) returns (ContactsResponse);
 	rpc DeleteContact (DeleteContactRequest) returns (GenericResponseMessage);
 	rpc DeletePhoneNumber (DeletePhoneNumberRequest) returns (ContactModel);
@@ -40,7 +40,7 @@ message PhoneNumberModel {
 
 message GetAllRequest {}
 
-message SearchModel {
+message SearchRequest {
 	string firstName = 1;
 	string lastName = 2;
 	string address = 3;

@@ -10,8 +10,15 @@ using System.Threading.Tasks;
 
 namespace GrpcConsoleClient
 {
+    /// <summary>
+    /// Implementation of phonebook grpc client
+    /// </summary>
     public class PhoneBookClient
     {
+        /// <summary>
+        /// Init channel and client
+        /// </summary>
+        /// <param name="serverUrl"></param>
         public PhoneBookClient(string serverUrl)
         {
             phoneBookChannel = GrpcChannel.ForAddress(serverUrl);
@@ -21,16 +28,17 @@ namespace GrpcConsoleClient
         private GrpcChannel phoneBookChannel;
         private PhoneBook.PhoneBookClient phoneBookClient;
 
-        public string gRPCURL { get; set; }
-
-
+        /// <summary>
+        /// Getting all contacts from rpc
+        /// </summary>
+        /// <returns></returns>
         internal async Task ShowAllContacts()
-        {   
-            ContactsResponse contacts = new ContactsResponse();
-
+        {               
             try
             {
-                contacts = await phoneBookClient.GetAllContactsAsync(new GetAllRequest());
+                // Execute rpc
+                // Request is empty object so it is just created on the same line
+                ContactsResponse contacts = await phoneBookClient.GetAllContactsAsync(new GetAllRequest());
 
                 if (contacts != null && contacts.Contact != null && contacts.Contact.Count > 0)
                 {
@@ -55,16 +63,24 @@ namespace GrpcConsoleClient
             }
         }
 
+        /// <summary>
+        /// Search for contacts
+        /// </summary>
+        /// <returns>Show stream from gRPC server of found contacts</returns>
         internal async Task SearchForContact()
-        {
-            SearchModel searchModel = UIHelper.InputSearchParameters();
+        {   
+            // Prepare request object
+            SearchRequest searchRequest = UIHelper.InputSearchParameters();
 
-            using (var search = phoneBookClient.SearchContacts(searchModel))
+            // Prepare stream read
+            using (var search = phoneBookClient.SearchContacts(searchRequest))
             {
                 Console.WriteLine("Printing out stream of found contacts");
 
                 try
                 {
+                    // Waiting for stream elements
+                    // This loop will go on until server closes the stream
                     while (await search.ResponseStream.MoveNext())
                     {
                         var currentContact = search.ResponseStream.Current;
@@ -203,7 +219,7 @@ namespace GrpcConsoleClient
                 Console.WriteLine($"Looking up phone number with ID={deleteRequest.NumberID} on the server");
                 PhoneNumberModel phoneNumber = await phoneBookClient.GetPhoneNumberAsync(new GetPhoneNumberRequest { NumberID = deleteRequest.NumberID });
                 Console.WriteLine("Found phone number:");
-                UIHelper.PrintPhoneNumber(phoneNumber);
+                UIHelper.PrintPhoneNumberMultiline(phoneNumber);
                 Console.Write("Are you sure you want to delete this phone number? (Y/N): ");
                 var confirmation = Console.ReadKey();
                 Console.WriteLine();
@@ -313,7 +329,7 @@ namespace GrpcConsoleClient
                 Console.WriteLine($"Looking up phone number with ID={numberID} on the server");
                 PhoneNumberModel phoneNumber = await phoneBookClient.GetPhoneNumberAsync(new GetPhoneNumberRequest { NumberID = numberID });
                 Console.WriteLine("Found phone number:");
-                UIHelper.PrintPhoneNumber(phoneNumber);
+                UIHelper.PrintPhoneNumberMultiline(phoneNumber);
                 Console.Write("Are you sure you want to delete this phone number? (Y/N): ");
                 var confirmation = Console.ReadKey();
                 Console.WriteLine();

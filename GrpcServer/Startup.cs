@@ -37,6 +37,7 @@ namespace GrpcServer
             {
                 endpoints.MapGrpcService<GreeterService>();                
                 endpoints.MapGrpcService<PhoneBookService>();
+                endpoints.MapGrpcService<BuddyGuyService>();
 
                 endpoints.MapGet("/", async context =>
                 {

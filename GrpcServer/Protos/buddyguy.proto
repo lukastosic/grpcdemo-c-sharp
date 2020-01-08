@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcServer.BuddyGuy";
+
+/*
+Sample of bi-directional messaging.
+It is trying to replicate famous South Park "I'm not your friend buddy" banter.
+*/
+service BuddyGuy {
+	rpc ImNotYour (stream BuddyRequest) returns (stream GuyResponse);
+}
+
+message BuddyRequest {
+	string message = 1;
+}
+
+message GuyResponse {
+	string message = 1;
+}
+
+
