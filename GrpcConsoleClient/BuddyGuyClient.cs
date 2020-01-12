@@ -56,7 +56,7 @@ namespace GrpcConsoleClient
 
                         await Task.Delay(1000);
 
-                        if (stopwatch.ElapsedMilliseconds < 20000)
+                        if (stopwatch.ElapsedMilliseconds < duration)
                         {
                             // Prepare new request
                             request = new BuddyRequest { Message = BuddyGuyDictionary[call.ResponseStream.Current.Message] };
